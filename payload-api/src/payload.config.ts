@@ -8,7 +8,7 @@ import { buildConfig } from "payload/config";
 
 import Users from "./collections/Users";
 import loginMember from "./collections/LoginMember";
-import Chat from "./collections/Chat";
+import Message from "./collections/Message";
 import Group from "./collections/Group";
 
 export default buildConfig({
@@ -17,7 +17,7 @@ export default buildConfig({
     bundler: webpackBundler(),
   },
   editor: slateEditor({}),
-  collections: [Users, loginMember, Chat, Group],
+  collections: [Users, loginMember, Message, Group],
   typescript: {
     outputFile: path.resolve(__dirname, "payload-types.ts"),
   },

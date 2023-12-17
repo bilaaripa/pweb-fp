@@ -1,197 +1,167 @@
 <template>
-  <section class="gradient-custom">
-    <div class="mask-custom">
-      <div class="container py-5">
-        <div class="row">
-          <div class="col-md-6 col-lg-5 col-xl-5 mb-4 mb-md-0">
-            <h5 class="font-weight-bold mb-3 text-center">Member</h5>
-            <div class="card mask-custom">
-              <div class="card-body">
-                <ul class="list-unstyled mb-0">
-                  <li
-                    v-for="member in members"
-                    :key="member.id"
-                    class="p-2 border-bottom"
-                  >
-                    <a
-                      href="#!"
-                      class="d-flex justify-content-between link-light"
-                    >
-                      <div class="d-flex flex-row">
-                        <div class="pt-1">
-                          <p class="fw-bold mb-0">{{ member.email }}</p>
-                          <!-- Tambahkan informasi lain tentang member jika diperlukan -->
-                        </div>
-                      </div>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
+  <div>
+    <header>
+      <div class="sidebar">
+        <h5>{{ groupName }}</h5>
+        <h2>Channel</h2>
+      </div>
+    </header>
+    <div class="chat">
+      <div v-for="msg in messages" :key="msg.id" class="message">
+        <p>{{ msg.chat }}</p>
+        <small>{{ formatTimestamp(msg.timestamp) }}</small>
+      </div>
 
-          <div
-            class="col-md-6 col-lg-7 col-xl-7 d-flex flex-column justify-content-between"
-          >
-            <ul class="list-unstyled text-white">
-              <li
-                v-for="chat in chats"
-                :key="chat.id"
-                class="d-flex justify-content-between mb-4"
-              >
-                <div class="card mask-custom">
-                  <div
-                    class="card-header d-flex justify-content-between p-3 border-bottom"
-                  >
-                    <p class="fw-bold mb-0">{{ chat.createdAt }}</p>
-                    <!-- Tambahkan informasi lain tentang chat jika diperlukan -->
-                  </div>
-                  <div class="card-body">
-                    <p class="mb-0">{{ chat.chat }}</p>
-                  </div>
-                </div>
-              </li>
-            </ul>
-            <div id="messageForm">
-              <div class="form-outline form-white mb-3">
-                <textarea
-                  class="form-control"
-                  v-model="message"
-                  rows="4"
-                ></textarea>
-                <label class="form-label" for="textAreaExample3">Message</label>
-              </div>
-              <button
-                @click="sendMessage"
-                class="btn btn-light btn-lg btn-rounded"
-              >
-                Send
-              </button>
-            </div>
-          </div>
-        </div>
+      <div class="mb-3">
+        <label for="exampleInputChat" class="form-label"></label>
+        <input
+          type="text"
+          class="form-control"
+          id="exampleInputEmail1"
+          placeholder="Ketik Pesan"
+          v-model="message"
+        />
+        <button @click="sendMessage" class="btn btn-primary">Send</button>
       </div>
     </div>
-  </section>
+  </div>
 </template>
 
 <script>
-import axios from "axios";
+import moment from "moment";
 
 export default {
   data() {
     return {
       message: "",
-      members: [],
-      chats: [],
+      messages: [],
+      selectedGroup: null,
+      groupName: "Nama Group",
     };
   },
   mounted() {
-    this.fetchMembers();
-    this.fetchChats();
+    this.fetchMessages();
+    this.selectedGroup = this.$route.query.groupId;
+    this.fetchGroupName();
   },
   methods: {
-    sendMessage() {
-      // Kirim pesan ke API chat di sini
-      console.log("Pesan yang dikirim:", this.message);
+    async fetchMessages() {
+      try {
+        const response = await fetch("http://localhost:3000/api/Message");
+        const data = await response.json();
+        this.messages = data.docs.reverse();
+      } catch (error) {
+        console.error("Error fetching messages:", error);
+      }
     },
-    fetchMembers() {
-      // Ambil data member dari API di sini
-      axios
-        .get("http://localhost:3000/api/loginMember")
-        .then((response) => {
-          this.members = response.data.docs;
-        })
-        .catch((error) => {
-          console.error("Error fetching members:", error);
+    async sendMessage() {
+      try {
+        if (this.message.trim() === "") {
+          return;
+        }
+
+        if (!this.selectedGroup) {
+          console.error("No group selected.");
+          return;
+        }
+
+        const response = await fetch("http://localhost:3000/api/Message", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            chat: this.message,
+            groupId: this.selectedGroup,
+          }),
         });
+
+        const result = await response.json();
+        console.log("Message sent:", result);
+
+        this.fetchMessages();
+        this.message = "";
+      } catch (error) {
+        console.error("Error sending message:", error);
+      }
     },
-    fetchChats() {
-      // Ambil data chat dari API di sini
-      axios
-        .get("http://localhost:3000/api/Chat")
-        .then((response) => {
-          this.chats = response.data.docs;
-        })
-        .catch((error) => {
-          console.error("Error fetching chats:", error);
-        });
+    async fetchGroupName() {
+      try {
+        if (this.selectedGroup) {
+          const response = await fetch(
+            `http://localhost:3000/api/Group/${this.selectedGroup}`
+          );
+          const data = await response.json();
+          this.groupName = data.channelName;
+        }
+      } catch (error) {
+        console.error("Error fetching group name:", error);
+      }
+    },
+    formatTimestamp(timestamp) {
+      try {
+        const momentDate = moment(timestamp);
+        if (momentDate.isValid()) {
+          return momentDate.format("YYYY/MM/DD HH:mm");
+        } else {
+          throw new Error("Invalid moment date");
+        }
+      } catch (error) {
+        console.error("Error formatting timestamp:", error);
+        return "Invalid Date";
+      }
     },
   },
 };
 </script>
 
-<style scoped>
-body,
-html {
-  height: 100%;
+<style>
+body {
   margin: 0;
+  padding-top: 20px;
+  font-family: "Inter", sans-serif;
 }
 
-.gradient-custom {
-  background: #007bff; /* Warna biru */
-  color: #fff; /* Warna teks putih */
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
+/* Sidebar styling */
+.sidebar {
+  height: 100vh;
+  width: 250px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #0d6efd;
+  color: #fff;
+  padding-top: 40px;
+  padding-right: 20px;
+  padding-bottom: 20px;
+  padding-left: 20px;
 }
 
-.mask-custom {
-  background: rgba(
-    255,
-    255,
-    255,
-    0.2
-  ); /* Warna latar belakang putih transparan */
-  border-radius: 2em;
-  backdrop-filter: blur(15px);
-  border: 2px solid rgba(255, 255, 255, 0.05);
-  background-clip: padding-box;
-  box-shadow: 10px 10px 10px rgba(46, 54, 68, 0.03);
-  color: #fff; /* Warna teks putih */
-  height: 80%; /* Sisakan 80% dari tinggi halaman */
-  overflow: hidden;
+/* Chat styling */
+.chat {
+  position: fixed;
+  bottom: 0;
+  left: 300px; /* Adjust this value to provide space between sidebar and chat */
+  width: calc(100% - 250px); /* Adjusted width */
+  padding: 10px;
 }
 
-.list-unstyled {
-  list-style: none;
-  padding: 0;
+.message {
+  background-color: #f2f2f2;
+  padding: 10px;
+  margin-bottom: 10px;
+  margin-right: 150px;
+  border-radius: 5px;
+  text-align: right;
 }
 
-.link-light {
-  color: #fff !important; /* Warna teks putih untuk link */
-  text-decoration: none !important;
+.chat input {
+  width: calc(100% - 150px); /* Adjusted input width */
+  margin-right: 10px;
 }
 
-.link-light:hover {
-  text-decoration: underline !important; /* Efek underline pada hover */
-}
-
-.btn-light {
-  background-color: #fff; /* Warna latar belakang putih untuk tombol */
-  color: #007bff; /* Warna teks biru untuk tombol */
-  border-color: #fff; /* Warna border putih untuk tombol */
-}
-
-.btn-light:hover {
-  background-color: #f0f0f0; /* Warna latar belakang abu-abu muda pada hover */
-}
-
-.form-outline {
-  position: relative;
-  box-sizing: border-box;
-}
-
-.form-control {
-  border-radius: 0;
-  border: 1px solid #fff; /* Warna border putih untuk input textarea */
-  background-color: transparent; /* Hapus latar belakang */
-  color: #fff; /* Warna teks putih */
-}
-
-.form-control:focus {
-  box-shadow: none; /* Hapus shadow pada focus */
+.chat button {
+  width: 70px;
+  margin-top: 10px;
 }
 </style>

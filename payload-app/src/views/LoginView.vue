@@ -23,10 +23,6 @@
           v-model="formData.password"
         />
       </div>
-      <div class="mb-3 form-check">
-        <input type="checkbox" class="form-check-input" id="exampleCheck1" />
-        <label class="form-check-label" for="exampleCheck1">Check me out</label>
-      </div>
       <button type="submit" class="btn btn-primary">Login</button>
     </form>
   </div>
@@ -65,12 +61,11 @@ export default {
 </script>
 
 <style scoped>
-/* Gaya untuk menengahkan form secara horizontal dan vertikal */
 .login-form {
-  max-width: 450px; /* Menambahkan lebar pada form */
-  padding: 20px; /* Menambahkan padding agar form tidak terlalu dekat dengan tepi */
-  border-radius: 10px; /* Menambahkan sudut yang lebih besar */
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* Menambahkan bayangan */
-  margin-left: auto !important; /* Menggeser ke kanan dengan !important */
+  max-width: 450px;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  margin-left: auto !important;
 }
 </style>

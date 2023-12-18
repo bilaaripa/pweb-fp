@@ -8,6 +8,9 @@ const loginMember: CollectionConfig = {
   },
   access: {
     create: () => true,
+    read: () => true,
+    delete: () => true,
+    update: () => true,
   },
   fields: [],
 };

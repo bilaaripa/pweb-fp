@@ -1,7 +1,7 @@
 import { CollectionConfig } from "payload/types";
 
 const Group: CollectionConfig = {
-  slug: "group",
+  slug: "contact",
   //   auth: true,
   admin: {
     useAsTitle: "email",
@@ -14,29 +14,22 @@ const Group: CollectionConfig = {
   },
   fields: [
     {
-      name: "channelName", // Corrected field name
+      name: "contactName", // Corrected field name
       type: "text",
       label: "Nama Channel",
       required: true,
     },
     {
-      name: "channelDescription",
+      name: "handphone",
       type: "text",
-      label: "Deskripsi Group",
+      label: "Nomor Hp",
       required: true,
     },
     {
-      name: "members",
-      label: "member",
+      name: "personalmessages",
+      label: "Personal Message",
       type: "relationship",
-      relationTo: "loginMember",
-      hasMany: true,
-    },
-    {
-      name: "messages",
-      label: "Message",
-      type: "relationship",
-      relationTo: "message",
+      relationTo: "personalmessage",
       hasMany: true,
     },
   ],

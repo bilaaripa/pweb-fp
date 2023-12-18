@@ -10,6 +10,8 @@ import Users from "./collections/Users";
 import loginMember from "./collections/LoginMember";
 import Message from "./collections/Message";
 import Group from "./collections/Group";
+import PersonalMessage from "./collections/PersonalMessage";
+import Contact from "./collections/Contact";
 
 export default buildConfig({
   admin: {
@@ -17,7 +19,7 @@ export default buildConfig({
     bundler: webpackBundler(),
   },
   editor: slateEditor({}),
-  collections: [Users, loginMember, Message, Group],
+  collections: [Users, loginMember, Message, Group, PersonalMessage, Contact],
   typescript: {
     outputFile: path.resolve(__dirname, "payload-types.ts"),
   },

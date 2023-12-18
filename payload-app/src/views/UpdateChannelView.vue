@@ -22,14 +22,12 @@
           v-model="formData.channelDescription"
         ></textarea>
       </div>
-      <button type="submit" class="btn btn-primary">Add Channel</button>
+      <button type="submit" class="btn btn-primary">Update Channel</button>
     </form>
   </div>
 </template>
 
 <script>
-import axios from "axios";
-
 export default {
   data() {
     return {
@@ -40,16 +38,22 @@ export default {
     };
   },
   methods: {
-    async submitForm() {
-      try {
-        await axios.post("http://localhost:3000/api/Group", {
-          channelName: this.formData.channelName,
-          channelDescription: this.formData.channelDescription,
+    submitForm() {
+      const updatedData = {
+        channelName: this.formData.channelName,
+        channelDescription: this.formData.channelDescription,
+      };
+      this.$axios
+        .put(
+          `http://localhost:3000/api/Group/${this.$route.params.groupId}`,
+          updatedData
+        )
+        .then(() => {
+          this.$router.push("/groupchat");
+        })
+        .catch((error) => {
+          console.error("Error updating channel:", error);
         });
-        this.$router.push("/groupchat");
-      } catch (error) {
-        console.error("Error during channel addition:", error.message);
-      }
     },
   },
 };

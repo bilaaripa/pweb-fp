@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top">
       <div class="container-fluid">
         <button
@@ -24,85 +23,34 @@
               <router-link to="/about">About</router-link>
             </li>
             <li class="nav-item">
+              <router-link to="/personalchat">Personal Chat</router-link>
+            </li>
+            <li class="nav-item">
+              <router-link to="/groupchat">Group Chat</router-link>
+            </li>
+            <li class="nav-item">
               <router-link to="/">Logout</router-link>
             </li>
           </ul>
-          <!-- Tombol Add Channel -->
-          <router-link class="btn btn-outline-primary me-2" to="/addchannel">
-            <i class="bi bi-plus"></i> Add Channel
-          </router-link>
+          <form class="d-flex" role="search">
+            <input
+              class="form-control me-2"
+              type="search"
+              placeholder="Search"
+              aria-label="Search"
+            />
+            <button class="btn btn-primary" type="submit">Search</button>
+          </form>
         </div>
       </div>
     </nav>
-
-    <!-- Card Section -->
-    <div class="container mt-5">
-      <div class="row">
-        <div
-          v-for="(group, index) in groups"
-          :key="index"
-          class="col-sm-6 mb-4"
-        >
-          <div class="card h-200 shadow">
-            <div class="card-body">
-              <h5 class="card-title">{{ group.channelName }}</h5>
-              <p class="card-text">{{ group.channelDescription }}</p>
-              <button @click="joinChannel(group.id)" class="btn btn-primary">
-                Join Channel
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div>
+      <h1>Welcome!</h1>
+      <p>Mulai grobrol dengan teman, kekasih dan keluargamu disini.</p>
     </div>
-
-    <!-- Konten -->
-    <main class="mt-5">
-      <div class="container">
-        <!-- ... (Konten lainnya) ... -->
-      </div>
-    </main>
   </div>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      groups: [],
-    };
-  },
-  mounted() {
-    this.getGroups();
-  },
-  activated() {
-    this.getGroups();
-  },
-  methods: {
-    async getGroups() {
-      try {
-        const response = await this.$axios.get(
-          "http://localhost:3000/api/Group"
-        );
-        this.groups = response.data.docs;
-      } catch (error) {
-        console.error("Error fetching groups:", error);
-      }
-    },
-    joinChannel(groupId) {
-      console.log("Joining channel with ID:", groupId);
-      this.$router.push({ path: "/channel", query: { groupId: groupId } });
-    },
-  },
-};
-</script>
+<script></script>
 
-<style>
-nav {
-  height: 70px;
-}
-
-main {
-  margin-top: 70px;
-}
-</style>
+<style></style>

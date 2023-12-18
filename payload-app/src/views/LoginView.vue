@@ -43,16 +43,12 @@ export default {
   methods: {
     async submitForm() {
       try {
-        // Make a POST request to the login endpoint without checking the response
         await axios.post(
           "http://localhost:3000/api/loginMember",
           this.formData
         );
-
-        // Navigate to the home page on successful login
         this.$router.push("/home");
       } catch (error) {
-        // Handle any errors here
         console.error("Error during login:", error.message);
       }
     },

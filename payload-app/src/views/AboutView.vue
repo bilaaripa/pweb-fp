@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top">
       <div class="container-fluid">
         <button
@@ -21,7 +20,13 @@
               <router-link to="/home">Home</router-link>
             </li>
             <li class="nav-item">
-              <router-link to="/about">About</router-link>
+              <router-link to="#">About</router-link>
+            </li>
+            <li class="nav-item">
+              <router-link to="/personalchat">Personal Chat</router-link>
+            </li>
+            <li class="nav-item">
+              <router-link to="/groupchat">Group Chat</router-link>
             </li>
             <li class="nav-item">
               <router-link to="/">Logout</router-link>
@@ -34,30 +39,28 @@
               placeholder="Search"
               aria-label="Search"
             />
-            <button class="btn btn-outline-success" type="submit">
-              Search
-            </button>
+            <button class="btn btn-primary" type="submit">Search</button>
           </form>
         </div>
       </div>
     </nav>
+    <div>
+      <h1>ChatingApp</h1>
+      <p>Project ini dibuat untuk memenuhi Eavalusi Akhir Semester.</p>
+    </div>
   </div>
 </template>
 
 <script>
-export default {
-  // Komponen Vue Anda
-};
+export default {};
 </script>
 
 <style scoped>
-/* Gaya tambahan untuk menyesuaikan navbar */
 nav {
-  height: 70px; /* Sesuaikan tinggi navbar sesuai keinginan Anda */
+  height: 70px;
 }
 
-/* Gaya untuk menyesuaikan konten di bawah navbar */
 main {
-  margin-top: 70px; /* Sesuaikan dengan tinggi navbar untuk mencegah tumpang tindih */
+  margin-top: 70px;
 }
 </style>

@@ -9,7 +9,7 @@
     <div class="chat">
       <div v-for="msg in messages" :key="msg.id" class="message">
         <p>{{ msg.chat }}</p>
-        <small>{{ formatTimestamp(msg.timestamp) }}</small>
+        <small>{{ msg.timestamp }}</small>
       </div>
 
       <div class="mb-3">
@@ -28,8 +28,6 @@
 </template>
 
 <script>
-import moment from "moment";
-
 export default {
   data() {
     return {
@@ -98,19 +96,6 @@ export default {
         console.error("Error fetching group name:", error);
       }
     },
-    formatTimestamp(timestamp) {
-      try {
-        const momentDate = moment(timestamp);
-        if (momentDate.isValid()) {
-          return momentDate.format("YYYY/MM/DD HH:mm");
-        } else {
-          throw new Error("Invalid moment date");
-        }
-      } catch (error) {
-        console.error("Error formatting timestamp:", error);
-        return "Invalid Date";
-      }
-    },
   },
 };
 </script>
@@ -121,8 +106,6 @@ body {
   padding-top: 20px;
   font-family: "Inter", sans-serif;
 }
-
-/* Sidebar styling */
 .sidebar {
   height: 100vh;
   width: 250px;
@@ -136,13 +119,11 @@ body {
   padding-bottom: 20px;
   padding-left: 20px;
 }
-
-/* Chat styling */
 .chat {
   position: fixed;
   bottom: 0;
-  left: 300px; /* Adjust this value to provide space between sidebar and chat */
-  width: calc(100% - 250px); /* Adjusted width */
+  left: 300px; 
+  width: calc(100% - 250px); 
   padding: 10px;
 }
 
@@ -156,7 +137,7 @@ body {
 }
 
 .chat input {
-  width: calc(100% - 150px); /* Adjusted input width */
+  width: calc(100% - 150px);
   margin-right: 10px;
 }
 
